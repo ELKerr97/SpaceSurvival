@@ -5,63 +5,56 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
+    private static final int EASY = 1;
+    private static final int MEDIUM = 2;
+    private static final int HARD = 3;
     public static void main(String[] args){
         if (args.length == 0){
             System.out.println("Usage: java Main <filename>");
             return;
         }
-        
-        // Get filename from command line
-        String filename = args[0];
 
+        try {
+            int mapSelection = Integer.parseInt(args[0]);
 
-        // Example map
-        int[][] map = loadMatrixFromFile(filename);
-        if (map == null){
-            System.out.println("Fialed to load grid from file: " + filename);
+            if (mapSelection == EASY){
+                System.out.println("Easy Map");
+            } else if (mapSelection == MEDIUM){
+                System.out.println("Medium Map");
+            } else if (mapSelection == HARD){
+                System.out.println("Hard Map");
+            } else {
+                System.out.println("No such map selection. Please try again with 1 (easy), 2 (medium), or 3 (hard)");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Input is not a valid number.");
             return;
         }
+        
+        // Get filename from command line
+        int mapType = Integer.parseInt(args[0]);
+        
+        MapGenerator mapGenerator = new MapGenerator();
 
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Grid Display");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            GridDisplay gridDisplay = new GridDisplay(map);
-            frame.add(gridDisplay);
-            frame.pack();
-            frame.setVisible(true);
-        });
-    }
-
-    private static int[][] loadMatrixFromFile(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            int rows = 0;
-            int cols = 0;
-            while ((line = reader.readLine()) != null) {
-                cols = Math.max(cols, line.length());
-                rows++;
-            }
-    
-            int[][] matrix = new int[rows][cols];
-    
-            // Reset reader to read from the beginning of the file
-            reader.close();
-            BufferedReader newReader = new BufferedReader(new FileReader(filename));
-    
-            int row = 0;
-            while ((line = newReader.readLine()) != null) {
-                for (int col = 0; col < line.length(); col++) {
-                    char ch = line.charAt(col);
-                    matrix[row][col] = Character.getNumericValue(ch);
-                }
-                row++;
-            }
-            return matrix;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+        // Get map from map generator
+        int[][] map = mapGenerator.generateMap(mapType);
+        if (map == null){
+            System.out.println("Failed to get map.");
+            return;
         }
+        
+        mapGenerator.printMap();
+
+        // Display map on GUI
+        // SwingUtilities.invokeLater(() -> {
+        //     JFrame frame = new JFrame("Grid Display");
+        //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //     GridDisplay gridDisplay = new GridDisplay(map);
+        //     frame.add(gridDisplay);
+        //     frame.pack();
+        //     frame.setVisible(true);
+        // });
     }
-    
-    
+
 }
