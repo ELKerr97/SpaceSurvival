@@ -1,7 +1,7 @@
 public class MapGenerator {    
-    private static final int EASY = 1;
-    private static final int MEDIUM = 2;
-    private static final int HARD = 3;
+    public static final int EASY = 98;
+    public static final int MEDIUM = 99;
+    public static final int HARD = 100;
 
     private static final int PLAYER = 4;
     private static final int ALIEN = 5;

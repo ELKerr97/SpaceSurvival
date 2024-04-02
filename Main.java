@@ -5,9 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
-    private static final int EASY = 1;
-    private static final int MEDIUM = 2;
-    private static final int HARD = 3;
+    private static final int EASY = 98;
+    private static final int MEDIUM = 99;
+    private static final int HARD = 100;
     public static void main(String[] args){
         if (args.length == 0){
             System.out.println("Usage: java Main <filename>");
@@ -24,7 +24,7 @@ public class Main {
             } else if (mapSelection == HARD){
                 System.out.println("Hard Map");
             } else {
-                System.out.println("No such map selection. Please try again with 1 (easy), 2 (medium), or 3 (hard)");
+                System.out.println("No such map selection. Please try again with 98 (easy), 99 (medium), or 100 (hard)");
                 return;
             }
         } catch (NumberFormatException e) {
