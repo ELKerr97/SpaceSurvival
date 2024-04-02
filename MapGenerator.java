@@ -1,7 +1,4 @@
 public class MapGenerator extends GameConstants{    
-
-    private static final int WALL = 7;
-
     private int[][] map;
 
     // Easy Map: Player starts out right in front of a weapon, and alien is on far side of the map
