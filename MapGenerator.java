@@ -1,11 +1,4 @@
-public class MapGenerator {    
-    public static final int EASY = 98;
-    public static final int MEDIUM = 99;
-    public static final int HARD = 100;
-
-    private static final int PLAYER = 4;
-    private static final int ALIEN = 5;
-    private static final int WEAPON = 6;
+public class MapGenerator extends GameConstants{    
 
     private static final int WALL = 7;
 
