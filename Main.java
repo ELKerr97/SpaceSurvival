@@ -45,7 +45,7 @@ public class Main extends GameConstants{
         
         mapGenerator.printMap();
 
-        Game game = new Game(map);
+        Game game = new Game(map, 2, 1);
 
         game.PlayGame();
 

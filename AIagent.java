@@ -1,4 +1,6 @@
-public class AIagent {
+import java.util.ArrayList;
+
+public class AIagent extends GameConstants{
     // Game map
     private int[][] map;
     // Is the player armed with a weapon
@@ -25,6 +27,8 @@ public class AIagent {
 
     // Update the map based on human and alien decisions
     private void updateMap(){
+        int alienTurn = alienTurn();
+        int humanTurn = humanTurn();
 
         return;
     }
@@ -35,15 +39,22 @@ public class AIagent {
     }
 
     // Determine alien(s) next move
-    public void alienTurn(){
+    public int alienTurn(){
 
-        return;
+        return MOVE_DOWN;
     }
 
     // Determine human next move
-    public void humanTurn(){
+    public int humanTurn(){
 
-        return;
+        return MOVE_UP;
     }
+
+    public boolean getPlayerArmed() {
+        return playerArmed;
+    }
+
+
+
     
 }
