@@ -10,9 +10,9 @@ public class AIagent extends LocationServices{
     // Alien movement speed
     private int alienMovementSpeed;
     // Value map for player
-    private int[][] playerValMap;
+    private double[][] playerValMap;
     // Value map for alien
-    private int[][] alienValMap;
+    private double[][] alienValMap;
     // Current alien positions
     private ArrayList<int[]> alienPositions;
     // Current player position
@@ -44,11 +44,54 @@ public class AIagent extends LocationServices{
         return MOVE_UP;
     }
 
+    private void playerValueIteration(){
+        double goalReward = 100.0;
+
+        boolean converged = false;
+        while(!converged){
+            double[][] oldValMap = playerValMap.clone();
+
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[0].length; j++) {
+                    playerValMap[i][j] = calculateExpectedValue(i, j, goalReward, oldValMap, playerPosition);
+                }
+            }
+
+            converged = checkConvergence(oldValMap, playerValMap, 0.1);
+        }
+    }
+
+    
+    // Calculate expected value for a state
+    private double calculateExpectedValue(int row, int col, double goalReward, double[][] valMap, int[] currentPosition) {
+        // Implement transition function to get next states
+        ArrayList<int[]> nextStates = getNextStates(currentPosition);
+
+        // Calculate expected value based on next states and rewards
+        double maxValue = Double.NEGATIVE_INFINITY;
+        for (int[] nextState : nextStates) {
+            // Calculate value for each next state
+            double nextStateValue = map[nextState[0]][nextState[1]] == PORTAL ? goalReward : valMap[nextState[0]][nextState[1]];
+            // Update maximum value
+            maxValue = Math.max(maxValue, nextStateValue);
+        }
+
+        // Return expected value (including reward for current state)
+        return maxValue;
+    }
+
+    // Check for convergence by comparing old and new value functions
+    private boolean checkConvergence(double[][] oldValueFunction, double[][] newValueFunction, double threshold) {
+        // Implement convergence check based on threshold or maximum iterations
+        // Return true if converged, false otherwise
+        return false;
+    }
+
     // Initialize alien value map for iteration later on
     private void initializeAlienValueMap(){
         ArrayList<int[]> alienPositions = getAlienPositions(map);
         int[] playerPosition = getPLayerPosition(map);
-        alienValMap = new int[map.length][map[0].length];
+        alienValMap = new double[map.length][map[0].length];
         alienValMap[playerPosition[0]][playerPosition[1]] = 100;
         System.out.println("Alien Value Map");
         printMap(alienValMap);
@@ -57,7 +100,7 @@ public class AIagent extends LocationServices{
 
     // Initialize player value map
     private void initializePlayerValueMap(){
-        playerValMap = new int[map.length][map[0].length];
+        playerValMap = new double[map.length][map[0].length];
         playerValMap[portalPosition[0]][portalPosition[1]] = 100;
         System.out.println("Player Value Map");
         printMap(playerValMap);

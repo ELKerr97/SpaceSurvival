@@ -58,12 +58,22 @@ public class LocationServices extends GameConstants {
         return positions;
     }
 
-    protected void printMap(int[][] map){
-        for (int i = 0; i < map[0].length; i++){
-            for (int j = 0; j < map.length; j++){
+    // Print method for int[][] arrays
+    protected void printMap(int[][] map) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
                 System.out.printf("%4d", map[i][j]);
             }
             System.out.println();
+        }
+    }
+
+    // Print method for double[][] arrays
+    protected void printMap(double[][] map) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                System.out.printf("%8.2f", map[i][j]); // Adjust format for double values
+            }
             System.out.println();
         }
     }
