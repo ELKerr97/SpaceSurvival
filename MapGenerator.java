@@ -10,7 +10,7 @@ public class MapGenerator extends GameConstants{
         {0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,WEAPON,0,0,0,0},
+        {0,0,0,0,PORTAL,0,0,0,0},
         {0,0,0,0,PLAYER,0,0,0,0}
     };
 

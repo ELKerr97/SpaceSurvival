@@ -8,7 +8,8 @@ public class GameConstants {
     protected final static int EMPTY_SPACE = 0;
     protected final static int PLAYER = 1;
     protected final static int ALIEN = 2;
-    protected final static int WEAPON = 3;
+    protected final static int PORTAL = 3;
+    protected final static int OBSTACLE = 10;
 
     // Possible movements for alien and human
     protected final static int MOVE_UP = 4;
