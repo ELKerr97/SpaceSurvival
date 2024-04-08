@@ -44,6 +44,8 @@ public class Main extends GameConstants{
         }
         
         mapGenerator.printMap();
+        System.out.println();
+        System.out.println();
 
         Game game = new Game(map, 2, 1);
 

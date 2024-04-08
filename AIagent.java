@@ -9,14 +9,7 @@ public class AIagent extends GameConstants{
     private int playerMovementSpeed;
     // Alien movement speed
     private int alienMovementSpeed;
-    // Possible movements for alien and human
-    private final int MOVE_UP = 1;
-    private final int MOVE_DOWN = 2;
-    private final int MOVE_LEFT = 3;
-    private final int MOVE_RIGHT = 4;
-    private final int STAY = 5;
-    // Possible human action to shoot alien if wielding a gun
-    private final int SHOOT_ALIEN = 6;
+
 
     public AIagent(int[][] map, boolean playerArmed, int playerMovementSpeed, int alienMovementSpeed){
         this.map = map;
@@ -25,36 +18,16 @@ public class AIagent extends GameConstants{
         this.alienMovementSpeed = alienMovementSpeed;
     }
 
-    // Update the map based on human and alien decisions
-    private void updateMap(){
-        int alienTurn = alienTurn();
-        int humanTurn = humanTurn();
-
-        return;
-    }
-
-    // Retrieve updated map
-    public int[][] getUpdatedMap(){
-        return map;
-    }
-
     // Determine alien(s) next move
-    public int alienTurn(){
-
+    public int getAlienNextMove(ArrayList<int[]> alienPositions){
+        
         return MOVE_DOWN;
     }
 
     // Determine human next move
-    public int humanTurn(){
+    public int getPlayerNextMove(int[] playerPosition){
 
         return MOVE_UP;
     }
 
-    public boolean getPlayerArmed() {
-        return playerArmed;
-    }
-
-
-
-    
 }
