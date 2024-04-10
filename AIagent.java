@@ -1,4 +1,6 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class AIagent extends LocationServices{
     // Game map
@@ -19,6 +21,10 @@ public class AIagent extends LocationServices{
     private int[] playerPosition;
     // Portal (goal) position
     private int[] portalPosition;
+    // Movement directions
+    private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}};
+    // Weight for progress towards portal
+    private final double PROG_WEIGHT = 5.0;
 
     public AIagent(int[][] map, boolean playerArmed, int playerMovementSpeed, int alienMovementSpeed){
         this.map = map;
@@ -28,63 +34,107 @@ public class AIagent extends LocationServices{
         this.playerMovementSpeed = playerMovementSpeed;
         this.alienMovementSpeed = alienMovementSpeed;
         initializeValues();
-        initializeAlienValueMap();
-        initializePlayerValueMap();
+        // initializeAlienValueMap();
+        // initializePlayerValueMap();
     }
 
     // TODO: Determine alien(s) next move
-    public int getAlienNextMove(){
+    public int[] getAlienNextMove(){
         
-        return MOVE_DOWN;
+        return null;
     }
 
     // TODO: Determine human next move
-    public int getPlayerNextMove(){
+    public int[] getPlayerNextMove(){
+        playerPosition = getPLayerPosition(map);
+        // Start with possible directions and apply weights
+        System.out.println("PlayerX: " + playerPosition[0] + ", PlayerY: " + playerPosition[1]);
 
-        return MOVE_UP;
-    }
+        ArrayList<double[]> validMoves = getValidMoves(playerPosition);
 
-    private void playerValueIteration(){
-        double goalReward = 100.0;
+        boolean[][] visited = new boolean[map.length][map[0].length];
+        visited[playerPosition[0]][playerPosition[1]] = true;
+        int[] bestMove = new int[3];
 
-        boolean converged = false;
-        while(!converged){
-            double[][] oldValMap = playerValMap.clone();
+        bestMove[2] = -100000;
 
-            for (int i = 0; i < map.length; i++) {
-                for (int j = 0; j < map[0].length; j++) {
-                    playerValMap[i][j] = calculateExpectedValue(i, j, goalReward, oldValMap, playerPosition);
-                }
+        for (double[] move : validMoves){
+            int x = (int)move[0];
+            int y = (int)move[1];
+
+            System.out.println("X: " + x + ", Y: " + y);
+            int mapPositionX = x + playerPosition[0];
+            int mapPositionY = y + playerPosition[1];
+            // System.out.println("MapX: " + mapPositionX + ", MapY: " + mapPositionY);
+            visited[playerPosition[0] + x][playerPosition[1] + y] = true;
+            // If alien is in that spot, don't go there.
+            if (map[mapPositionX][mapPositionY] == ALIEN){
+                move[2] += -10000.0;
+            // If portal is in that spot, go there.
+            } else if (map[mapPositionX][mapPositionY] == PORTAL){
+                move[2] += 10000.00;
+            } 
+
+            if (move[2] > bestMove[2]) {
+                bestMove[0] = (int)move[0];
+                bestMove[1] = (int)move[1];
+                bestMove[2] = (int)move[2];
+            }
+        }
+        
+        // Go one more layer to make sure alien is 2 spots away
+        for (double[] move : validMoves) {
+            double weight = 0;
+            for (int[] dir : DIRECTIONS){
+                int newX = (int)move[0] + dir[0] + playerPosition[0];
+                int newY = (int)move[1] + dir[1] + playerPosition[1];
+                
+                // Only look if it's a valid position
+                if (isValidPosition(newX, newY)){
+                    // If alien is close, we want to avoid it.
+                    if (map[newX][newY] == ALIEN){
+                        weight += -500;
+                    } 
+                    // Weight based on distance to goal
+                    double distanceUtility = getDistToGoal(playerPosition, portalPosition) - getDistToGoal(new int[]{newX, newY}, portalPosition);
+                    weight += PROG_WEIGHT*distanceUtility;
+                } 
+                move[2] += weight;
             }
 
-            converged = checkConvergence(oldValMap, playerValMap, 0.1);
+            if (move[2] > bestMove[2]){
+                bestMove[0] = (int)move[0];
+                bestMove[1] = (int)move[1];
+                bestMove[2] = (int)move[2];
+            }
         }
+
+        for (double[] move : validMoves){
+            System.out.println("x: " + move[0] + ", y: " + move[1] + ", score: " + move[2]);
+        }
+
+        return bestMove;
     }
 
+    private double getDistToGoal(int[] currPosition, int[] goalPosition){
+        return Math.sqrt(
+            Math.pow(goalPosition[0] - currPosition[0], 2) + Math.pow(goalPosition[1] - currPosition[1], 2)
+            );
+    }
     
-    // Calculate expected value for a state
-    private double calculateExpectedValue(int row, int col, double goalReward, double[][] valMap, int[] currentPosition) {
-        // Implement transition function to get next states
-        ArrayList<int[]> nextStates = getNextStates(currentPosition);
-
-        // Calculate expected value based on next states and rewards
-        double maxValue = Double.NEGATIVE_INFINITY;
-        for (int[] nextState : nextStates) {
-            // Calculate value for each next state
-            double nextStateValue = map[nextState[0]][nextState[1]] == PORTAL ? goalReward : valMap[nextState[0]][nextState[1]];
-            // Update maximum value
-            maxValue = Math.max(maxValue, nextStateValue);
+    private ArrayList<double[]> getValidMoves(int[] position){
+        ArrayList<double[]> validMoves = new ArrayList<>();
+        for (int[] dir : DIRECTIONS){
+            if (isValidPosition(position[0] + dir[0], position[1] + dir[1])){
+                // Add direction along with utility value starting at 0
+                validMoves.add(new double[]{dir[0], dir[1], 0});
+            }
         }
-
-        // Return expected value (including reward for current state)
-        return maxValue;
+        return validMoves;
     }
 
-    // Check for convergence by comparing old and new value functions
-    private boolean checkConvergence(double[][] oldValueFunction, double[][] newValueFunction, double threshold) {
-        // Implement convergence check based on threshold or maximum iterations
-        // Return true if converged, false otherwise
-        return false;
+    private boolean isValidPosition(int row, int col) {
+        return row >= 0 && row < map.length && col >= 0 && col < map[0].length;
     }
 
     // Initialize alien value map for iteration later on
@@ -112,36 +162,5 @@ public class AIagent extends LocationServices{
         alienPositions = getAlienPositions(map);
         playerPosition = getPLayerPosition(map);
         portalPosition = getPortalPosition(map);
-    }
-
-    // Get next states for alien or player
-    private ArrayList<int[]> getNextStates(int[] currentPosition) {
-        ArrayList<int[]> nextStates = new ArrayList<>();
-    
-        // Define the possible actions (moves)
-        int[][] moves = {
-            {-1, 0}, // Up
-            {1, 0},  // Down
-            {0, -1}, // Left
-            {0, 1}   // Right
-        };
-    
-        // Check each possible move
-        for (int[] move : moves) {
-            int nextRow = currentPosition[0] + move[0];
-            int nextCol = currentPosition[1] + move[1];
-    
-            // Check if the next position is within the map bounds and not an obstacle
-            if (isValidPosition(nextRow, nextCol) && map[nextRow][nextCol] != OBSTACLE) {
-                // Add the next position as a possible next state
-                nextStates.add(new int[]{nextRow, nextCol});
-            }
-        }
-    
-        return nextStates;
-    }
-    
-    private boolean isValidPosition(int row, int col) {
-        return row >= 0 && row < map.length && col >= 0 && col < map[0].length;
     }
 }

@@ -3,14 +3,14 @@ public class MapGenerator extends GameConstants{
 
     // Easy Map: Player starts out right in front of a weapon, and alien is on far side of the map
     private static final int[][] EASY_MAP = {
+        {0,0,0,0,PORTAL,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
         {0,0,0,0,ALIEN,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,PORTAL,0,0,0,0},
         {0,0,0,0,PLAYER,0,0,0,0}
     };
 

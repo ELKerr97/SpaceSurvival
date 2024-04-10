@@ -27,69 +27,35 @@ public class Game extends LocationServices{
         boolean gameEnd = false;
         AIagent aiAgent = new AIagent(map, playerArmed, playerMovementSpeed, alienMovementSpeed);
         int totalRounds = 0;
+        printMap(map);
+
         while (!gameEnd){
-            // Print map
-            printMap(map);
-            
             // Get current positions of player and aliens (May not need this actually)
             playerPosition = getPLayerPosition(map);
             alienPositions = getAlienPositions(map);
 
             // Run AI to determine next move for alien and player
-            int playerMove = aiAgent.getPlayerNextMove();
-            int alienMove = aiAgent.getAlienNextMove();
+            int[] playerMove = aiAgent.getPlayerNextMove();
+            int[] alienMove = aiAgent.getAlienNextMove();
+
+            System.out.println("Player move x: " + playerMove[0] + ", y: " + playerMove[1]);
 
             updateMap(playerMove, alienMove);
-            
+            printMap(map);
+
             totalRounds += 1;
             System.out.println("Total Rounds: " + totalRounds);
 
-            // Wait 5 seconds
+            // Pause 
             pause(2);
         }
         return;
     }
 
-    private void updateMap(int playerMove, int alienMove) {
+    private void updateMap(int[] playerMove, int[] alienMove) {
         // Update player position 
-        switch (playerMove) {
-            case MOVE_DOWN:
-                if (playerPosition[0] < map.length - playerMovementSpeed){
-                    map[playerPosition[0] + playerMovementSpeed][playerPosition[1]] = PLAYER;
-                    map[playerPosition[0]][playerPosition[1]] = EMPTY_SPACE;
-                } else {
-                    System.out.println("Error: Player tried to move DOWN, but out of bounds.");
-                }
-                break;
-            case MOVE_LEFT:
-                if (playerPosition[1] >= playerMovementSpeed){
-                    map[playerPosition[0]][playerPosition[1] - playerMovementSpeed] = PLAYER;
-                    map[playerPosition[0]][playerPosition[1]] = EMPTY_SPACE;
-                } else {
-                    System.out.println("Error: Player tried to move LEFT, but out of bounds.");
-                }
-                break;
-            case MOVE_RIGHT:
-                if (playerPosition[1] > map[0].length - playerMovementSpeed){
-                    map[playerPosition[0]][playerPosition[1] + playerMovementSpeed] = PLAYER;
-                    map[playerPosition[0]][playerPosition[1]] = EMPTY_SPACE;
-                } else {
-                    System.out.println("Error: Player tried to move RIGHT, but out of bounds.");
-                }  
-                break;
-            case MOVE_UP:
-                if (playerPosition[0] >= playerMovementSpeed){
-                    map[playerPosition[0] - playerMovementSpeed][playerPosition[1]] = PLAYER;
-                    map[playerPosition[0]][playerPosition[1]] = EMPTY_SPACE;
-                } else {
-                    System.out.println("Error: Player tried to move UP, but out of bounds.");
-                }
-                break;
-            case STAY:
-                break;
-            default:
-                break;
-        }
+        map[playerPosition[0]][playerPosition[1]] = EMPTY_SPACE;
+        map[playerPosition[0] + playerMove[0]][playerPosition[1] + playerMove[1]] = PLAYER;
 
         // TODO: Update alien position
     }
