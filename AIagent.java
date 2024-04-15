@@ -16,7 +16,7 @@ public class AIagent extends LocationServices{
     // Portal (goal) position
     private int[] portalPosition;
     // Movement directions
-    private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}};
+private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1,1},{1,-1},{-1,-1}*/};
 
     public AIagent(int[][] map, boolean playerArmed, int playerMovementSpeed, int alienMovementSpeed){
         this.map = map;
@@ -31,6 +31,11 @@ public class AIagent extends LocationServices{
         this.playerPosition[1] = y;
     }
 
+    public void updateAlienPosition(int x, int y){
+        this.alienPosition[0] = x;
+        this.alienPosition[1] = y;
+    }
+
     // TODO: Determine alien(s) next move
     public int[] getAlienNextMove(){
         
@@ -38,27 +43,28 @@ public class AIagent extends LocationServices{
     }
 
     // TODO: Determine human next move
-    public int[] getPlayerNextMove(){
-        List<String> pathToGoal = getPathToGoal(playerPosition, portalPosition);
+    public int[] getAgentNextMove(int[] currentPosition, int[] goalPosition, int agent){
+        List<String> pathToGoal = getPathToGoal(currentPosition, goalPosition, agent);
         System.out.println(pathToGoal);
+        int[] change = new int[2];
 
-        if (pathToGoal.isEmpty()){
+        if (pathToGoal == null){
             System.out.println("No path from player to goal found.");
-            return null;
+            change[0] = 0;
+            change[1] = 0;
+            return change;
         }
-        System.out.println("Player position: " + "[" + playerPosition[0] + "," + playerPosition[1] + "]");
+
         String nextPosition = pathToGoal.get(0);
-        System.out.println("Next position: " + nextPosition);
         int[] nextPosArray = Arrays.stream(nextPosition.substring(1, nextPosition.length() - 1).split(", "))
             .mapToInt(Integer::parseInt).toArray();
-        int dx = nextPosArray[0] - playerPosition[0];
-        int dy = nextPosArray[1] - playerPosition[1];
+        change[0] = nextPosArray[0] - currentPosition[0];
+        change[1] = nextPosArray[1] - currentPosition[1];
         
-        return new int[]{dx, dy};
+        return change;
     }
 
-    // TODO: make this dynamic so alien can seek out player
-    private List<String> getPathToGoal(int[] currPosition, int[] goal){
+    private List<String> getPathToGoal(int[] currPosition, int[] goal, int agent){
         Queue<int[]> q = new LinkedList<>();
         Map<String, int[]> parentMap = new HashMap<>();
         Set<String> visited = new HashSet<>();
@@ -83,50 +89,56 @@ public class AIagent extends LocationServices{
                 int newX = curr[0] + dir[0];
                 int newY = curr[1] + dir[1];
                 String newPosition = Arrays.toString(new int[]{newX, newY});
-
-                if (isValidPosition(newX, newY) && !isAlienPosition(newX, newY) && !isObstaclePosition(newX, newY) 
+                
+                if (agent == PLYR){
+                    if (isValidPosition(newX, newY) && !isAlienPosition(newX, newY) && !isObstaclePosition(newX, newY) 
                     && !visited.contains(newPosition)) {
-
                     q.offer(new int[]{newX, newY});
                     parentMap.put(newPosition, curr);
                     visited.add(newPosition);
                 }
+                } else if (agent == ALIN) {
+                    if (isValidPosition(newX, newY) && !isObstaclePosition(newX, newY) 
+                    && !visited.contains(newPosition)) {
+                    q.offer(new int[]{newX, newY});
+                    parentMap.put(newPosition, curr);
+                    visited.add(newPosition);
+                }
+                }
+
             }
         }
         return null;
     }
 
     private boolean isAlienPosition(int x, int y){
-        if (map[x][y] == ALIEN) {
-            System.out.println("ALIEN DETECTED");
+        if (map[x][y] == ALIN) {
+            // System.out.println("ALIEN DETECTED");
             return true;
-        } 
+        }
+
+        // Check if alien is at least one more away. We don't want to get caught!
+        for (int[] dir : DIRECTIONS){
+            int newX = x + dir[0];
+            int newY = y + dir[1];
+
+            if (isValidPosition(newX, newY)){
+                if (map[newX][newY] == ALIN){
+                    // System.out.println("ALIEN DETECTED ONE MORE AWAY");
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
     private boolean isObstaclePosition(int x, int y){
-        if (map[x][y] == OBSTACLE) {
-            System.out.println("OBSTACLE DETECTED");
+        if (map[x][y] == OBST) {
+            // System.out.println("OBSTACLE DETECTED");
             return true;
         } 
         return false;
-    }
-
-    private double getDistToGoal(int[] currPosition, int[] goalPosition){
-        return Math.sqrt(
-            Math.pow(goalPosition[0] - currPosition[0], 2) + Math.pow(goalPosition[1] - currPosition[1], 2)
-            );
-    }
-    
-    private ArrayList<double[]> getValidMoves(int[] position){
-        ArrayList<double[]> validMoves = new ArrayList<>();
-        for (int[] dir : DIRECTIONS){
-            if (isValidPosition(position[0] + dir[0], position[1] + dir[1])){
-                // Add direction along with utility value starting at 0
-                validMoves.add(new double[]{dir[0], dir[1], 0});
-            }
-        }
-        return validMoves;
     }
 
     private boolean isValidPosition(int row, int col) {

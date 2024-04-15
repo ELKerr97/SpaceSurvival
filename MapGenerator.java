@@ -2,29 +2,82 @@ public class MapGenerator extends GameConstants{
     private int[][] map;
 
     // Easy Map: Player starts out right in front of a weapon, and alien is on far side of the map
-    private static final int[][] EASY_MAP = {
-        {0,0,0,0,PORTAL,OBSTACLE,0,0,0},
-        {0,0,0,0,0,0,0,OBSTACLE,0},
-        {0,0,0,0,0,0,0,OBSTACLE,0},
+    private static final int[][] MAP_90 = {
+        {0,0,0,0,PORT,OBST,0,0,ALIN},
+        {0,0,0,0,0,0,0,OBST,0},
+        {0,0,0,0,0,0,0,OBST,0},
+        {0,0,0,0,0,0,0,OBST,0},
+        {0,0,0,0,0,0,0,OBST,0},
+        {0,0,0,0,OBST,OBST,0,OBST,0},
+        {0,0,0,0,OBST,OBST,0,OBST,0},
         {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,ALIEN,0,0,0,0},
-        {0,0,0,0,0,OBSTACLE,0,0,0},
-        {0,0,0,0,0,OBSTACLE,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,PLAYER,0,0,0,0}
+        {0,0,0,0,PLYR,0,0,0,0}
     };
 
-    // Easy Map: Player starts out right in front of a weapon, and alien is on far side of the map
-    private static final int[][] MED_MAP = {
-        {0,0,0,0,PORTAL,OBSTACLE,0,0,0},
-        {0,OBSTACLE,0,0,0,0,0,OBSTACLE,0},
-        {0,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,0},
-        {0,ALIEN,0,0,0,0,0,0,0},
+    private static final int[][] MAP_91 = {
+        {0,0,0,0,PORT,OBST,0,0,0},
+        {0,OBST,0,0,0,0,0,OBST,0},
+        {0,OBST,OBST,OBST,OBST,OBST,OBST,OBST,0},
+        {0,ALIN,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
-        {ALIEN,0,0,0,0,OBSTACLE,0,0,0},
-        {ALIEN,0,0,0,0,OBSTACLE,0,0,0},
-        {0,0,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,0,0},
-        {0,0,0,0,PLAYER,0,0,0,0}
+        {0,0,0,0,0,OBST,0,0,0},
+        {0,0,0,0,0,OBST,0,0,0},
+        {0,OBST,OBST,OBST,OBST,OBST,OBST,0,0},
+        {0,0,0,0,PLYR,0,0,0,0}
+    };
+
+    private static final int[][] MAP_92 = {
+        {0,0,0,ALIN,PORT,OBST,0,0,0},
+        {0,OBST,0,0,0,0,0,OBST,OBST},
+        {0,OBST,OBST,OBST,OBST,OBST,OBST,OBST,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,OBST,0,0,0},
+        {0,0,0,0,0,OBST,0,0,0},
+        {0,0,OBST,OBST,OBST,OBST,OBST,0,0},
+        {PLYR,0,0,0,0,0,0,0,0}
+    };
+
+    private static final int[][] MAP_93 = {
+        {0,0,0,ALIN,PORT,OBST,0,0,0},
+        {0,OBST,0,0,0,0,0,OBST,OBST},
+        {0,OBST,OBST,OBST,OBST,OBST,OBST,OBST,0},
+        {0,0,0,0,0,0,0,0,0},
+        {0,OBST,0,0,0,0,0,0,0},
+        {0,OBST,0,0,0,OBST,0,0,0},
+        {0,OBST,0,0,0,OBST,0,0,0},
+        {0,OBST,OBST,OBST,OBST,OBST,OBST,0,0},
+        {PLYR,0,0,0,0,0,0,0,0}
+    };
+
+    private static final int[][] MAP_100 = {
+        {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, EMTY, EMTY, OBST, PORT},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, OBST, EMTY, EMTY, ALIN},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, OBST},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {OBST, OBST, OBST, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {PLYR, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY}
+    };
+
+    private static final int[][] MAP_101 = {
+        {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, EMTY, EMTY, OBST, PORT},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, OBST, EMTY, EMTY, ALIN},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {OBST, OBST, OBST, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {PLYR, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY}
     };
 
     public MapGenerator(){
@@ -33,14 +86,26 @@ public class MapGenerator extends GameConstants{
 
     public int[][] generateMap(int mapType){
         switch (mapType) {
-            case EASY:
-                map = EASY_MAP;
+            case 90:
+                map = MAP_90;
                 break;
-            case MEDIUM:
-                map = MED_MAP;
+            case 91:
+                map = MAP_91;
+                break;
+            case 92:
+                map = MAP_92;
+                break;
+            case 93:
+                map = MAP_93;
+                break;
+            case 100:
+                map = MAP_100;
+                break;
+            case 101:
+                map = MAP_101;
                 break;
             default:
-                map = EASY_MAP;
+                map = MAP_90;
                 break;
         }
         return map;

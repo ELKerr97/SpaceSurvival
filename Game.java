@@ -20,9 +20,9 @@ public class Game extends LocationServices{
     // JFrame
     private JFrame frame;
     // Pause time
-    private final int PAUSE = 1;
+    private int pause;
 
-    public Game(int[][] map, int playerMovementSpeed, int alienMovementSpeed) {
+    public Game(int[][] map, int playerMovementSpeed, int alienMovementSpeed, int gameSpeed) {
         this.map = map;
         this.playerArmed = false;
         this.playerMovementSpeed = playerMovementSpeed;
@@ -30,6 +30,7 @@ public class Game extends LocationServices{
         this.playerPosition = null;
         this.alienPosition = null;
         this.portalPosition = null;
+        this.pause = gameSpeed;
     }   
 
     public void playGame() {
@@ -49,14 +50,16 @@ public class Game extends LocationServices{
         frame.pack();
         frame.setVisible(true);
 
+        frame.repaint();
+
         while (!gameEnd){
             // Get current positions of player and aliens (May not need this actually)
             playerPosition = getPLayerPosition(map);
             alienPosition = getAlienPositions(map);
 
             // Run AI to determine next move for alien and player
-            int[] playerMove = aiAgent.getPlayerNextMove();
-            int[] alienMove = aiAgent.getAlienNextMove();
+            int[] playerMove = aiAgent.getAgentNextMove(playerPosition, portalPosition, PLYR);
+            int[] alienMove = aiAgent.getAgentNextMove(alienPosition, playerPosition, ALIN);
 
             updateMap(playerMove, alienMove);
             frame.repaint();
@@ -67,7 +70,7 @@ public class Game extends LocationServices{
 
             gameEnd = gameEnded();
             // Pause 
-            pause(PAUSE);
+            pause(pause);
         }
         return;
     }
@@ -89,19 +92,29 @@ public class Game extends LocationServices{
         int newPlayerX = playerPosition[0] + playerMove[0];
         int newPlayerY = playerPosition[1] + playerMove[1];
 
-        map[playerPosition[0]][playerPosition[1]] = EMPTY_SPACE;
-        map[newPlayerX][newPlayerY] = PLAYER;
+        map[playerPosition[0]][playerPosition[1]] = EMTY;
+        map[newPlayerX][newPlayerY] = PLYR;
 
         aiAgent.updatePlayerPosition(newPlayerX, newPlayerY);
         playerPosition[0] = newPlayerX;
         playerPosition[1] = newPlayerY;
 
-        // TODO: Update alien position
+        // Update alien position
+        int newAlienX = alienPosition[0] + alienMove[0];
+        int newAlienY = alienPosition[1] + alienMove[1];
+
+        map[alienPosition[0]][alienPosition[1]] = EMTY;
+        map[newAlienX][newAlienY] = ALIN;
+
+        aiAgent.updateAlienPosition(newAlienX, newAlienY);
+        alienPosition[0] = newAlienX;
+        alienPosition[1] = newAlienY;
     }
 
+    // Add time between turns
     private void pause(int seconds) {
         try {
-            Thread.sleep(seconds * 1000); // Sleep for 1000 milliseconds (1 second)
+            Thread.sleep(seconds * 500); 
         } catch (InterruptedException e) {
             // Handle interrupted exception if needed
         }

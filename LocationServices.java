@@ -7,7 +7,7 @@ public class LocationServices extends GameConstants {
         int[] position = new int[2];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if (map[i][j] == PLAYER) {
+                if (map[i][j] == PLYR) {
                     position[0] = i;
                     position[1] = j;
                     if (describePositions) {System.out.println("Player at position (" + position[0] + "," + position[1] + ")");}
@@ -24,7 +24,7 @@ public class LocationServices extends GameConstants {
         int[] position = new int[2];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if (map[i][j] == PORTAL) {
+                if (map[i][j] == PORT) {
                     position[0] = i;
                     position[1] = j;
                     if (describePositions) {System.out.println("Portal at position (" + position[0] + "," + position[1] + ")");}
@@ -40,7 +40,7 @@ public class LocationServices extends GameConstants {
     protected int[] getAlienPositions(int[][] map){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
-                if (map[i][j] == ALIEN) {
+                if (map[i][j] == ALIN) {
                     // add location to positions array
                     return new int[]{i,j};
                 }

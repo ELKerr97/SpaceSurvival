@@ -5,11 +5,11 @@ public class GameConstants {
     protected final static int HARD = 100;
 
     // "Pieces" on board
-    protected final static int EMPTY_SPACE = 0;
-    protected final static int PLAYER = 1;
-    protected final static int ALIEN = 2;
-    protected final static int PORTAL = 3;
-    protected final static int OBSTACLE = 10;
+    protected final static int EMTY = 0;
+    protected final static int PLYR = 1;
+    protected final static int ALIN = 2;
+    protected final static int PORT = 3;
+    protected final static int OBST = 10;
 
     // Possible movements for alien and human
     protected final static int MOVE_UP = 4;
