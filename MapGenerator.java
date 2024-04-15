@@ -80,6 +80,21 @@ public class MapGenerator extends GameConstants{
         {PLYR, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY}
     };
 
+    private static final int[][] MAP_102 = {
+        {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, EMTY, EMTY, OBST, PORT},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, OBST, EMTY, EMTY, ALIN},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {OBST, OBST, OBST, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {PLYR, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY}
+    };
+
     public MapGenerator(){
         this.map = null;
     }
@@ -103,6 +118,9 @@ public class MapGenerator extends GameConstants{
                 break;
             case 101:
                 map = MAP_101;
+                break;
+            case 102:
+                map = MAP_102;
                 break;
             default:
                 map = MAP_90;

@@ -31,16 +31,16 @@ public class GridDisplay extends JPanel {
                 int value = map[i][j];
                 Color color;
                 switch (value) {
-                    case EMPTY_SPACE: // Empty Space
+                    case EMPTY_SPACE: 
                         color = Color.WHITE;
                         break;
-                    case OBSTACLE: // Obstacle
+                    case OBSTACLE: 
                         color = Color.BLACK;
                         break;
-                    case PLAYER: // Current Character Position
+                    case PLAYER: 
                         color = Color.GREEN;
                         break;
-                    case PORTAL: // Weapons
+                    case PORTAL: 
                         color = Color.YELLOW;
                         break;
                     case ALIEN: // Enemies
