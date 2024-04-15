@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -49,17 +48,9 @@ public class Main extends GameConstants{
 
         Game game = new Game(map, 1, 1);
 
-        game.PlayGame();
+        game.playGame();
 
-        // Display map on GUI
-        // SwingUtilities.invokeLater(() -> {
-        //     JFrame frame = new JFrame("Grid Display");
-        //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //     GridDisplay gridDisplay = new GridDisplay(map);
-        //     frame.add(gridDisplay);
-        //     frame.pack();
-        //     frame.setVisible(true);
-        // });
+        return;
     }
 
 }

@@ -37,25 +37,17 @@ public class LocationServices extends GameConstants {
         return null;
     }
 
-    protected ArrayList<int[]> getAlienPositions(int[][] map){
-        ArrayList<int[]> positions = new ArrayList<>();
+    protected int[] getAlienPositions(int[][] map){
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map.length; j++) {
                 if (map[i][j] == ALIEN) {
                     // add location to positions array
-                    positions.add(new int[] {i,j});
+                    return new int[]{i,j};
                 }
             }
         }
-        
-        if (describePositions) {
-            System.out.println(positions.size() + " alien(s) found on map.");
-            System.out.println("Alien Positions:");
-            for (int[] pos : positions) {
-                System.out.println("(" + pos[0] + "," + pos[1] + ")");
-            }
-        }
-        return positions;
+        System.out.println("Alien position not found.");
+        return null;
     }
 
     // Print method for int[][] arrays

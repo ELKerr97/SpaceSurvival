@@ -5,6 +5,12 @@ public class GridDisplay extends JPanel {
     private int [][] map;
     private int rows;
     private int cols;
+    // "Pieces" on board
+    private final int EMPTY_SPACE = 0;
+    private final int PLAYER = 1;
+    private final int ALIEN = 2;
+    private final int PORTAL = 3;
+    private final int OBSTACLE = 10;
 
     public GridDisplay(int[][] map){
         this.map = map;
@@ -13,6 +19,7 @@ public class GridDisplay extends JPanel {
         // Can adjust cell size as needed
         setPreferredSize(new Dimension(cols * 30, rows * 30));
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -25,19 +32,19 @@ public class GridDisplay extends JPanel {
                 int value = map[i][j];
                 Color color;
                 switch (value) {
-                    case 0: // Empty Space
+                    case EMPTY_SPACE: // Empty Space
                         color = Color.WHITE;
                         break;
-                    case 1: // Obstacle
+                    case OBSTACLE: // Obstacle
                         color = Color.BLACK;
                         break;
-                    case 2: // Current Character Position
+                    case PLAYER: // Current Character Position
                         color = Color.GREEN;
                         break;
-                    case 3: // Weapons
+                    case PORTAL: // Weapons
                         color = Color.YELLOW;
                         break;
-                    case 4: // Enemies
+                    case ALIEN: // Enemies
                         color = Color.RED;
                         break;
                     default:

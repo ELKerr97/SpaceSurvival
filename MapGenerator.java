@@ -3,14 +3,27 @@ public class MapGenerator extends GameConstants{
 
     // Easy Map: Player starts out right in front of a weapon, and alien is on far side of the map
     private static final int[][] EASY_MAP = {
-        {0,0,0,0,PORTAL,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,PORTAL,OBSTACLE,0,0,0},
+        {0,0,0,0,0,0,0,OBSTACLE,0},
+        {0,0,0,0,0,0,0,OBSTACLE,0},
         {0,0,0,0,0,0,0,0,0},
         {0,0,0,0,ALIEN,0,0,0,0},
+        {0,0,0,0,0,OBSTACLE,0,0,0},
+        {0,0,0,0,0,OBSTACLE,0,0,0},
         {0,0,0,0,0,0,0,0,0},
+        {0,0,0,0,PLAYER,0,0,0,0}
+    };
+
+    // Easy Map: Player starts out right in front of a weapon, and alien is on far side of the map
+    private static final int[][] MED_MAP = {
+        {0,0,0,0,PORTAL,OBSTACLE,0,0,0},
+        {0,OBSTACLE,0,0,0,0,0,OBSTACLE,0},
+        {0,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,0},
+        {0,ALIEN,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0,0},
+        {ALIEN,0,0,0,0,OBSTACLE,0,0,0},
+        {ALIEN,0,0,0,0,OBSTACLE,0,0,0},
+        {0,0,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,OBSTACLE,0,0},
         {0,0,0,0,PLAYER,0,0,0,0}
     };
 
@@ -22,6 +35,9 @@ public class MapGenerator extends GameConstants{
         switch (mapType) {
             case EASY:
                 map = EASY_MAP;
+                break;
+            case MEDIUM:
+                map = MED_MAP;
                 break;
             default:
                 map = EASY_MAP;
