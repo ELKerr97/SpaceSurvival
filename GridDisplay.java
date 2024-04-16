@@ -17,7 +17,7 @@ public class GridDisplay extends JPanel {
         this.rows = map.length;
         this.cols = map[0].length;
         // Can adjust cell size as needed
-        setPreferredSize(new Dimension(cols * 50, rows * 50));
+        setPreferredSize(new Dimension(cols * 70, rows * 70));
     }
 
     @Override

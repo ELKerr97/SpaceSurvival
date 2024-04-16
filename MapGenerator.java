@@ -88,11 +88,26 @@ public class MapGenerator extends GameConstants{
         {EMTY, EMTY, EMTY, EMTY, OBST, OBST, OBST, OBST, OBST, EMTY, OBST, EMTY},
         {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
         {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
-        {OBST, OBST, OBST, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {OBST, EMTY, OBST, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
         {EMTY, EMTY, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
         {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
         {EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
         {PLYR, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY}
+    };
+
+    private static final int[][] MAP_103 = {
+        {PLYR, OBST, EMTY, EMTY, OBST, OBST, OBST, OBST, EMTY, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, OBST, EMTY, EMTY, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {OBST, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, EMTY, OBST, OBST, OBST, OBST, OBST, EMTY, OBST, EMTY},
+        {EMTY, EMTY, OBST, EMTY, EMTY, OBST, PORT, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {OBST, EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY},
+        {EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, EMTY},
+        {EMTY, OBST, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, EMTY, OBST, ALIN}
     };
 
     public MapGenerator(){
@@ -121,6 +136,9 @@ public class MapGenerator extends GameConstants{
                 break;
             case 102:
                 map = MAP_102;
+                break;
+            case 103:
+                map = MAP_103;
                 break;
             default:
                 map = MAP_90;

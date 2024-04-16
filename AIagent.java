@@ -3,26 +3,24 @@ import java.util.*;
 public class AIagent extends LocationServices{
     // Game map
     private int[][] map;
-    // Is the player armed with a weapon
-    private boolean playerArmed;
-    // Player movement speed
-    private int playerMovementSpeed;
-    // Alien movement speed
-    private int alienMovementSpeed;
     // Current alien position
     private int[] alienPosition;
     // Current player position
     private int[] playerPosition;
-    // Portal (goal) position
-    private int[] portalPosition;
     // Movement directions
-private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1,1},{1,-1},{-1,-1}*/};
+    private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1,1},{1,-1},{-1,-1}*/};
+    // Random
+    private Random random;
+    // Detection accuracy
+    private double detectionAccuracy;
+    // Risk factor: How likely the player is to get close to the alien to maneuver around
+    private double playerRiskFactor;
 
-    public AIagent(int[][] map, boolean playerArmed, int playerMovementSpeed, int alienMovementSpeed){
+    public AIagent(int[][] map, double detectionAccuracy, double playerRiskFactor){
         this.map = map;
-        this.playerArmed = false;
-        this.playerMovementSpeed = playerMovementSpeed;
-        this.alienMovementSpeed = alienMovementSpeed;
+        this.detectionAccuracy = detectionAccuracy;
+        this.playerRiskFactor = playerRiskFactor;
+        this.random = new Random();
         initializeValues();
     }
 
@@ -36,13 +34,7 @@ private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1
         this.alienPosition[1] = y;
     }
 
-    // TODO: Determine alien(s) next move
-    public int[] getAlienNextMove(){
-        
-        return null;
-    }
-
-    // TODO: Determine human next move
+    // Determine next move for alien or human
     public int[] getAgentNextMove(int[] currentPosition, int[] goalPosition, int agent){
         List<String> pathToGoal = getPathToGoal(currentPosition, goalPosition, agent);
         System.out.println(pathToGoal);
@@ -91,15 +83,13 @@ private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1
                 String newPosition = Arrays.toString(new int[]{newX, newY});
                 
                 if (agent == PLYR){
-                    if (isValidPosition(newX, newY) && !isAlienPosition(newX, newY) && !isObstaclePosition(newX, newY) 
-                    && !visited.contains(newPosition)) {
+                    if (isValidPosition(newX, newY) && !isAlienPosition(newX, newY) && !visited.contains(newPosition)) {
                     q.offer(new int[]{newX, newY});
                     parentMap.put(newPosition, curr);
                     visited.add(newPosition);
                 }
                 } else if (agent == ALIN) {
-                    if (isValidPosition(newX, newY) && !isObstaclePosition(newX, newY) 
-                    && !visited.contains(newPosition)) {
+                    if (isValidPosition(newX, newY) && !visited.contains(newPosition) && !isPortalPosition(newX, newY)) {
                     q.offer(new int[]{newX, newY});
                     parentMap.put(newPosition, curr);
                     visited.add(newPosition);
@@ -111,25 +101,40 @@ private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1
         return null;
     }
 
-    private boolean isAlienPosition(int x, int y){
-        if (map[x][y] == ALIN) {
-            // System.out.println("ALIEN DETECTED");
+    private boolean isPortalPosition(int x, int y){
+        if (map[x][y] == PORT){
             return true;
         }
+        return false;
+    }
 
-        // Check if alien is at least one more away. We don't want to get caught!
-        for (int[] dir : DIRECTIONS){
-            int newX = x + dir[0];
-            int newY = y + dir[1];
+    // Used for human to detect whether or not the alien is in the next position
+    private boolean isAlienPosition(int x, int y){
+        int alienDetectionChance = random.nextInt(100);
 
-            if (isValidPosition(newX, newY)){
-                if (map[newX][newY] == ALIN){
-                    // System.out.println("ALIEN DETECTED ONE MORE AWAY");
-                    return true;
+
+        if (alienDetectionChance * 0.01 <= detectionAccuracy){
+            if (map[x][y] == ALIN) {
+                // System.out.println("ALIEN DETECTED");
+                return true;
+            }
+            
+            int riskChance = random.nextInt(100);
+            if (riskChance * 0.01 >= playerRiskFactor){
+                // Check if alien is at least one more away to avoid risk
+                for (int[] dir : DIRECTIONS){
+                    int newX = x + dir[0];
+                    int newY = y + dir[1];
+        
+                    if (isValidPosition(newX, newY)){
+                        if (map[newX][newY] == ALIN){
+                            // System.out.println("ALIEN DETECTED ONE MORE AWAY");
+                            return true;
+                        }
+                    }
                 }
             }
-        }
-
+        } 
         return false;
     }
 
@@ -142,13 +147,12 @@ private final static int[][] DIRECTIONS = {{1,0},{-1,0},{0,1},{0,-1}/*,{-1,1},{1
     }
 
     private boolean isValidPosition(int row, int col) {
-        return row >= 0 && row < map.length && col >= 0 && col < map[0].length;
+        return row >= 0 && row < map.length && col >= 0 && col < map[0].length && !isObstaclePosition(row, col);
     }
 
     // Initialize alien, player, and portal positions
     private void initializeValues(){
         alienPosition = getAlienPositions(map);
         playerPosition = getPLayerPosition(map);
-        portalPosition = getPortalPosition(map);
     }
 }

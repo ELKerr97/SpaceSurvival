@@ -21,8 +21,15 @@ public class Game extends LocationServices{
     private JFrame frame;
     // Pause time
     private int pause;
+    // Alien Detection accuracy
+    private double alienDetectionAccuracy;
+    // Player risk factor
+    private double playerRiskFactor;
+    // Game end
+    boolean gameEnd;
 
-    public Game(int[][] map, int playerMovementSpeed, int alienMovementSpeed, int gameSpeed) {
+
+    public Game(int[][] map, int playerMovementSpeed, int alienMovementSpeed, int gameSpeed, double alienDetectionAccuracy, double playerRiskFactor) {
         this.map = map;
         this.playerArmed = false;
         this.playerMovementSpeed = playerMovementSpeed;
@@ -31,11 +38,13 @@ public class Game extends LocationServices{
         this.alienPosition = null;
         this.portalPosition = null;
         this.pause = gameSpeed;
+        this.alienDetectionAccuracy = alienDetectionAccuracy;
+        this.playerRiskFactor = playerRiskFactor;
     }   
 
     public void playGame() {
-        boolean gameEnd = false;
-        aiAgent = new AIagent(map, playerArmed, playerMovementSpeed, alienMovementSpeed);
+        gameEnd = false;
+        aiAgent = new AIagent(map, alienDetectionAccuracy, playerRiskFactor);
         int totalRounds = 0;
         printMap(map);
         portalPosition = getPortalPosition(map);
@@ -62,29 +71,29 @@ public class Game extends LocationServices{
             int[] alienMove = aiAgent.getAgentNextMove(alienPosition, playerPosition, ALIN);
 
             updateMap(playerMove, alienMove);
+
             frame.repaint();
             printMap(map);
 
             totalRounds += 1;
             System.out.println("Total Rounds: " + totalRounds);
 
-            gameEnd = gameEnded();
             // Pause 
             pause(pause);
         }
+
         return;
     }
 
-    private boolean gameEnded(){
-        if (playerPosition[0] == portalPosition[0] && playerPosition[1] == portalPosition[1]){
-            JOptionPane.showMessageDialog(frame, "The human got to the portal!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } else if (playerPosition[0] == alienPosition[0] && playerPosition[1] == alienPosition[1]){
+    private void checkEndGame(int playerX, int playerY, int alienX, int alienY){
+        if (alienX == playerX && alienY == playerY || playerX == alienPosition[0] && playerY == alienPosition[1]){
+            gameEnd = true;
             JOptionPane.showMessageDialog(frame, "The alien trapped the human!", "Game Over", JOptionPane.ERROR_MESSAGE);
-            return true;
-        } else {
-            return false;
+        } else if (playerX == portalPosition[0] && playerY == portalPosition[1]){
+            gameEnd = true;
+            JOptionPane.showMessageDialog(frame, "The human got to the portal!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
         }
+        return;
     }
 
     private void updateMap(int[] playerMove, int[] alienMove) {
@@ -92,19 +101,22 @@ public class Game extends LocationServices{
         int newPlayerX = playerPosition[0] + playerMove[0];
         int newPlayerY = playerPosition[1] + playerMove[1];
 
-        map[playerPosition[0]][playerPosition[1]] = EMTY;
-        map[newPlayerX][newPlayerY] = PLYR;
-
-        aiAgent.updatePlayerPosition(newPlayerX, newPlayerY);
-        playerPosition[0] = newPlayerX;
-        playerPosition[1] = newPlayerY;
-
         // Update alien position
         int newAlienX = alienPosition[0] + alienMove[0];
         int newAlienY = alienPosition[1] + alienMove[1];
 
+        checkEndGame(newPlayerX, newPlayerY, newAlienX, newAlienY);
+
+        // If game ended, no need to update map anymore.
+        map[playerPosition[0]][playerPosition[1]] = EMTY;
+        map[newPlayerX][newPlayerY] = PLYR;
+
         map[alienPosition[0]][alienPosition[1]] = EMTY;
         map[newAlienX][newAlienY] = ALIN;
+
+        aiAgent.updatePlayerPosition(newPlayerX, newPlayerY);
+        playerPosition[0] = newPlayerX;
+        playerPosition[1] = newPlayerY;
 
         aiAgent.updateAlienPosition(newAlienX, newAlienY);
         alienPosition[0] = newAlienX;

@@ -6,8 +6,8 @@ import java.io.IOException;
 public class Main extends GameConstants{
 
     public static void main(String[] args){
-        if (args.length == 0){
-            System.out.println("Usage: java Main [Game Number 90-91] [Speed 1-5]");
+        if (args.length < 4){
+            System.out.println("Usage: java Main [Game Number 90-91] [Speed 1-5] [Alien Detection Accuracy 0.0-1.0] [Player Risk Factor 0.0-1.0]");
             return;
         }
 
@@ -15,7 +15,7 @@ public class Main extends GameConstants{
         try {
             mapType = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            System.out.println("Input is not a valid number.");
+            System.out.println("Map type input is not a valid int.");
             return;
         }
 
@@ -23,7 +23,23 @@ public class Main extends GameConstants{
         try {
             speedSelection = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            System.out.println("Input is not a valid number.");
+            System.out.println("Speed selection input is not a valid int.");
+            return;
+        }
+
+        double alienDetectionAccuracy;
+        try {
+            alienDetectionAccuracy = Double.parseDouble(args[2]);
+        } catch (NumberFormatException e) {
+            System.out.println("Detection accuracy input is not a valid double.");
+            return;
+        }
+
+        double playerRiskFactor;
+        try {
+            playerRiskFactor = Double.parseDouble(args[3]);
+        } catch (NumberFormatException e) {
+            System.out.println("Risk factor input is not a valid double.");
             return;
         }
         
@@ -40,11 +56,12 @@ public class Main extends GameConstants{
         System.out.println();
         System.out.println();
 
-        Game game = new Game(map, 1, 1, speedSelection);
+        Game game = new Game(map, 1, 1, speedSelection, alienDetectionAccuracy, playerRiskFactor);
 
         game.playGame();
 
-        return;
+        System.out.println("Thanks for playing!");
+        System.exit(0);;
     }
 
 }
